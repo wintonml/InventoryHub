@@ -1,0 +1,67 @@
+@using ClientApp.Services
+@page "/fetchproducts"
+@inject HttpClient Http
+@inject IProductApiClient ProductApiService
+
+@using Shared.Models
+@using System.Text.Json
+
+<h3>Product List</h3>
+
+@if (isLoading)
+{
+    <p>Loading products...</p>
+}
+else if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+    </div>
+}
+else
+{
+    <ul>
+        @foreach (var product in products)
+        {
+            <li>@product.Name - $@product.Price</li>
+        }
+    </ul>
+}
+
+@code {
+    private Product[] products = [];
+    private bool isLoading;
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadProductsAsync();
+    }
+
+    private async Task LoadProductsAsync()
+    {
+        isLoading = true;
+        errorMessage = null;
+
+        try
+        {
+            products = await ProductApiService.GetProductsAsync();
+        }
+        catch (TimeoutException)
+        {
+            errorMessage = "The request timed out while loading products.";
+        }
+        catch (InvalidOperationException ex)
+        {
+            errorMessage = ex.Message;
+        }
+        catch (Exception)
+        {
+            errorMessage = "An unexpected error occurred while loading products.";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}
