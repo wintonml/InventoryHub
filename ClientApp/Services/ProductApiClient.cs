@@ -25,7 +25,7 @@ public class ProductApiClient : IProductApiClient
             using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             timeoutCts.CancelAfter(TimeSpan.FromSeconds(10));
 
-            var response = await _httpClient.GetAsync(ApiEndpoints.Products, timeoutCts.Token);
+            var response = await _httpClient.GetAsync(ApiEndpoints.ProductList, timeoutCts.Token);
 
             response.EnsureSuccessStatusCode();
 

@@ -13,7 +13,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("ClientAppPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:5034", "https://localhost:7097")
+        policy.AllowAnyOrigin()
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -23,7 +23,7 @@ var app = builder.Build();
 
 app.UseCors("ClientAppPolicy");
 
-app.MapGet(ApiEndpoints.Products, () =>
+app.MapGet(ApiEndpoints.ProductList, () =>
 {
     return new Product []
     {
