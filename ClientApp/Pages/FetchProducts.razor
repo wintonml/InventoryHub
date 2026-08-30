@@ -1,4 +1,5 @@
 @using ClientApp.Services
+@using Shared.Constants
 @page "/fetchproducts"
 @inject IProductApiClient ProductApiService
 
@@ -47,7 +48,7 @@ else
         }
         catch (TimeoutException)
         {
-            errorMessage = "The request timed out while loading products.";
+            errorMessage = ApiErrorMessages.RequestTimeout;
         }
         catch (InvalidOperationException ex)
         {
@@ -55,7 +56,7 @@ else
         }
         catch (Exception)
         {
-            errorMessage = "An unexpected error occurred while loading products.";
+            errorMessage = ApiErrorMessages.UnexpectedError;
         }
         finally
         {
